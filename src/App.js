@@ -5,7 +5,7 @@ import Logo from "./components/Logo";
 import Search from "./components/Search";
 import NumResults from "./components/NumResults";
 import Box from "./components/Box";
-import MovieList from "./components/MoviesList";
+import MoviesList from "./components/MoviesList";
 import WatchedSummary from "./components/WatchedSummary";
 import WatchedMoviesList from "./components/WatchedMoviesList";
 import MovieDetails from "./components/MovieDetails";
@@ -52,7 +52,7 @@ export default function App() {
           ) : (
             <>
               {!error && (
-                <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+                <MoviesList movies={movies} onSelectMovie={handleSelectMovie} />
               )}
               {error && <ErrorMessage message={error} />}
             </>

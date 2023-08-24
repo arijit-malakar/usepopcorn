@@ -1,6 +1,6 @@
 import Movie from "./Movie";
 
-function MovieList({ movies, onSelectMovie }) {
+function MoviesList({ movies, onSelectMovie }) {
   return (
     <ul className="list list-movies">
       {movies?.map((movie) => (
@@ -10,4 +10,4 @@ function MovieList({ movies, onSelectMovie }) {
   );
 }
 
-export default MovieList;
+export default MoviesList;
