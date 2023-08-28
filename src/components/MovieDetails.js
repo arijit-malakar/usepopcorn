@@ -91,7 +91,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
               &larr;
             </button>
             <img src={poster} alt={`Poster of ${title} movie`} />
-            <div className="details-overview">
+            <div className="details-overview" data-testid="movie-details">
               <h2>{title}</h2>
               <p>
                 {released} &bull; {runtime}

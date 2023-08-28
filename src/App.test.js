@@ -40,6 +40,23 @@ const handlers = [
     } else if (req.url.searchParams.get("i")) {
       const id = req.url.searchParams.get("i");
 
+      if (id === "tt1234321") {
+        return res(
+          ctx.json({
+            Title: "interstellar",
+            Year: "2014",
+            Poster: "interstellar_poster_url",
+            Runtime: "169 min",
+            imdbRating: "8.7",
+            Plot: "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot...",
+            Released: "07 Nov 2014",
+            Actors: "Matthew McConaughey, Anne Hathaway, Jessica Chastai",
+            Director: "Christopher Nolan",
+            Genre: "Adventure, Drama, Sci-Fi",
+          })
+        );
+      }
+
       if (id === "tt1234567") {
         return res(
           ctx.json({
@@ -107,29 +124,77 @@ test("renders movie details on clicking a movie from the search result", async (
   const searchInput = screen.getByPlaceholderText(/search movies/i);
   fireEvent.change(searchInput, { target: { value: "int" } });
 
-  //   const movieListItem = await screen.findByTestId(
-  //     "list-item-interstellar wars"
-  //   );
-
   const movieTitle = await screen.findByText("interstellar wars");
   fireEvent.click(movieTitle);
 
   const moviePoster = await screen.findByRole("img", {
     name: "Poster of interstellar wars movie",
   });
+  const movieDetails = screen.getByTestId("movie-details");
+
   expect(moviePoster).toBeInTheDocument();
+  expect(movieDetails).toBeInTheDocument();
+  expect(movieDetails).toHaveTextContent("interstellar wars");
 });
 
-// test('renders 1 result when searched for "interstellar" movie', () => {
-//   render(<App />);
-//   const searchInput = screen.getByPlaceholderText(/search movies/i);
-//   fireEvent.change(searchInput, { target: { value: "interstellar" } });
+test("renders watched movie and updates watched summary on adding a movie from movie details", async () => {
+  render(<App />);
 
-//   const loadingText = screen.getByText("Loading...");
-//   expect(loadingText).toBeInTheDocument();
-// });
+  const searchInput = screen.getByPlaceholderText(/search movies/i);
+  fireEvent.change(searchInput, { target: { value: "int" } });
 
-const pause = () =>
-  new Promise((resolve) => {
-    setTimeout(resolve, 200);
+  const movieTitle = await screen.findByText("interstellar");
+  fireEvent.click(movieTitle);
+
+  const starButton = await screen.findAllByTestId("star-button");
+  const fourthStar = starButton[3];
+  expect(fourthStar).toBeInTheDocument();
+  fireEvent.click(fourthStar);
+
+  const addToListButton = screen.getByRole("button", {
+    name: "+ Add to list",
   });
+  expect(addToListButton).toBeInTheDocument();
+  fireEvent.click(addToListButton);
+
+  const watchedCount = screen.getByText("1 movies");
+  expect(watchedCount).toBeInTheDocument();
+
+  const watchedListItem = screen.getAllByTestId("watched-movie-listitem");
+  expect(watchedListItem).toHaveLength(1);
+  const watchedDetails = {
+    name: "interstellar",
+    imdbRating: "8.7",
+    userRating: "4",
+    runtime: "169 min",
+    deleteButton: "X",
+  };
+  for (const field in watchedDetails) {
+    expect(watchedListItem[0]).toHaveTextContent(watchedDetails[field]);
+  }
+});
+
+test("clears movie from the watched list and updates watched summary on removing a movie", () => {
+  render(<App />);
+
+  const watchedListItem = screen.getAllByTestId("watched-movie-listitem");
+  const watchedImage = screen.getByRole("img", { name: "interstellar poster" });
+  const deleteWatched = screen.getByRole("button", { name: "X" });
+
+  expect(watchedListItem).toHaveLength(1);
+  expect(watchedListItem[0]).toHaveTextContent("interstellar");
+  expect(watchedImage).toBeInTheDocument();
+  expect(deleteWatched).toBeInTheDocument();
+
+  fireEvent.click(deleteWatched);
+
+  const watchedCount = screen.getByText("0 movies");
+  expect(watchedCount).toBeInTheDocument();
+  const noWatchedListItem = screen.queryByTestId("watched-movie-listitem");
+  expect(noWatchedListItem).not.toBeInTheDocument();
+});
+
+// const pause = () =>
+//   new Promise((resolve) => {
+//     setTimeout(resolve, 200);
+//   });

@@ -15,6 +15,7 @@ export default function Star({
   return (
     <span
       role="button"
+      data-testid="star-button"
       style={starStyle}
       onClick={onRate}
       onMouseEnter={onHoverIn}

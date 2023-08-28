@@ -1,6 +1,6 @@
 function WatchedMovie({ movie, onDeleteWatched }) {
   return (
-    <li>
+    <li data-testid="watched-movie-listitem">
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>
