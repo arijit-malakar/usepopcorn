@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import user from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { handlers } from "../test/mocks";
 import MovieDetails from "./MovieDetails";
@@ -41,6 +42,9 @@ const watchedExisting = [
 
 test("renders movie details and rating from selectedId, if it differs from watched movie", async () => {
   render(<MovieDetails selectedId="tt1234321" watched={watched} />);
+
+  const loadingText = await screen.findByText("Loading...");
+  expect(loadingText).toBeInTheDocument();
 
   const posterImg = await screen.findByRole("img", {
     name: "Poster of interstellar movie",
@@ -107,27 +111,59 @@ test("calls onAddWatched and onCloseMovie handlers on clicking Add to List butto
   expect(mockOnClose).toHaveBeenCalled();
 });
 
-// test("calls onCloseMovie on pressing Escape key", async () => {
-//   const mockOnClose = jest.fn();
-//   render(
-//     <MovieDetails
-//       selectedId="tt1234321"
-//       watched={watched}
-//       onAddWatched={() => {}}
-//       onCloseMovie={mockOnClose}
-//     />
-//   );
+test("calls onCloseMovie on pressing Escape key", async () => {
+  const mockOnClose = jest.fn();
+  render(
+    <MovieDetails
+      selectedId="tt1234321"
+      watched={watched}
+      onAddWatched={() => {}}
+      onCloseMovie={mockOnClose}
+    />
+  );
 
-//   const posterImg = await screen.findByRole("img", {
-//     name: "Poster of interstellar movie",
-//   });
-//   expect(posterImg).toBeInTheDocument();
-//   screen.debug();
+  const posterImg = await screen.findByRole("img", {
+    name: "Poster of interstellar movie",
+  });
+  expect(posterImg).toBeInTheDocument();
 
-//   fireEvent.keyDown(document, { key: "Escape" });
+  user.type(document.body, "{esc}");
+  expect(mockOnClose).toHaveBeenCalled();
+});
 
-//   expect(mockOnClose).toHaveBeenCalled();
-// });
+test("calls onCloseMovie on clicking ← button", async () => {
+  const mockOnClose = jest.fn();
+  render(
+    <MovieDetails
+      selectedId="tt1234567"
+      watched={watched}
+      onAddWatched={() => {}}
+      onCloseMovie={mockOnClose}
+    />
+  );
+
+  const posterImg = await screen.findByRole("img", {
+    name: "Poster of interstellar wars movie",
+  });
+  const backButton = screen.getByRole("button", { name: "←" });
+
+  expect(posterImg).toBeInTheDocument();
+  expect(backButton).toBeInTheDocument();
+
+  user.click(backButton);
+  expect(mockOnClose).toHaveBeenCalled();
+});
+
+test("updates document title with movie title", async () => {
+  render(<MovieDetails selectedId="tt1234321" watched={watched} />);
+
+  const posterImg = await screen.findByRole("img", {
+    name: "Poster of interstellar movie",
+  });
+
+  expect(posterImg).toBeInTheDocument();
+  expect(document.title).toBe("Movie | interstellar");
+});
 
 // const pause = () =>
 //   new Promise((resolve) => {
