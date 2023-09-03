@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import user from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { handlers } from "./test/mocks";
 import App from "./App";
@@ -119,3 +120,27 @@ test("clears movie from the watched list and updates watched summary on removing
   const noWatchedListItem = screen.queryByTestId("watched-movie-listitem");
   expect(noWatchedListItem).not.toBeInTheDocument();
 });
+
+// test("clears input and focuses on the search field when Enter key is pressed", async () => {
+//   render(<App />);
+
+//   const searchField = screen.getByPlaceholderText(/search movies/i);
+
+//   fireEvent.change(searchField, { target: { value: "int" } });
+//   searchField.blur();
+//   expect(searchField).not.toHaveFocus();
+
+//   const otherEl = screen.getByText(/movies you watched/i);
+//   otherEl.focus();
+//   // expect(otherEl).toHaveFocus();
+//   user.type(otherEl, "{enter}");
+//   expect(searchField).toHaveFocus();
+//   await waitFor(() => {
+//     expect(searchField).toHaveValue("");
+//   });
+// });
+
+// const pause = () =>
+//   new Promise((resolve) => {
+//     setTimeout(resolve, 200);
+//   });

@@ -164,8 +164,3 @@ test("updates document title with movie title", async () => {
   expect(posterImg).toBeInTheDocument();
   expect(document.title).toBe("Movie | interstellar");
 });
-
-// const pause = () =>
-//   new Promise((resolve) => {
-//     setTimeout(resolve, 200);
-//   });
