@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import user from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { handlers } from "./test/mocks";
 import App from "./App";
@@ -121,26 +120,34 @@ test("clears movie from the watched list and updates watched summary on removing
   expect(noWatchedListItem).not.toBeInTheDocument();
 });
 
-// test("clears input and focuses on the search field when Enter key is pressed", async () => {
-//   render(<App />);
+test("clears input and focuses on the search field when Enter key is pressed", async () => {
+  render(<App />);
 
-//   const searchField = screen.getByPlaceholderText(/search movies/i);
+  const searchField = screen.getByPlaceholderText(/search movies/i);
 
-//   fireEvent.change(searchField, { target: { value: "int" } });
-//   searchField.blur();
-//   expect(searchField).not.toHaveFocus();
+  fireEvent.change(searchField, { target: { value: "int" } });
 
-//   const otherEl = screen.getByText(/movies you watched/i);
-//   otherEl.focus();
-//   // expect(otherEl).toHaveFocus();
-//   user.type(otherEl, "{enter}");
-//   expect(searchField).toHaveFocus();
-//   await waitFor(() => {
-//     expect(searchField).toHaveValue("");
-//   });
-// });
+  const movieTitle = await screen.findByText("interstellar");
+  fireEvent.click(movieTitle);
 
-// const pause = () =>
-//   new Promise((resolve) => {
-//     setTimeout(resolve, 200);
-//   });
+  const moviePoster = await screen.findByRole("img", {
+    name: "Poster of interstellar movie",
+  });
+
+  expect(moviePoster).toBeInTheDocument();
+  expect(searchField).not.toHaveFocus();
+
+  fireEvent.keyDown(moviePoster, {
+    key: "Enter",
+    code: "Enter",
+    charCode: 13,
+    keyCode: 13,
+  });
+
+  await waitFor(() => {
+    expect(searchField).toHaveFocus();
+  });
+  await waitFor(() => {
+    expect(searchField).toHaveValue("");
+  });
+});
