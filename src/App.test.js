@@ -1,4 +1,11 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
+import user from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { handlers } from "./test/mocks";
 import App from "./App";
@@ -44,7 +51,7 @@ test("renders error text when searched for an invalid query", async () => {
   expect(errorMessage).toHaveClass("error");
 });
 
-test("renders movie details on clicking a movie from the search result", async () => {
+test("renders movie details on clicking a movie from the search result and hides it on clicking again", async () => {
   render(<App />);
 
   const searchInput = screen.getByPlaceholderText(/search movies/i);
@@ -61,6 +68,10 @@ test("renders movie details on clicking a movie from the search result", async (
   expect(moviePoster).toBeInTheDocument();
   expect(movieDetails).toBeInTheDocument();
   expect(movieDetails).toHaveTextContent("interstellar wars");
+  fireEvent.click(movieTitle);
+  expect(moviePoster).not.toBeInTheDocument();
+  expect(movieDetails).not.toBeInTheDocument();
+  expect(document.title).toBe("usePopcorn");
 });
 
 test("renders watched movie and updates watched summary on adding a movie from movie details", async () => {
@@ -120,7 +131,7 @@ test("clears movie from the watched list and updates watched summary on removing
   expect(noWatchedListItem).not.toBeInTheDocument();
 });
 
-test("clears input and focuses on the search field when Enter key is pressed", async () => {
+test("clears input and focuses on the search field when Enter key is pressed from a different element", async () => {
   render(<App />);
 
   const searchField = screen.getByPlaceholderText(/search movies/i);
@@ -150,4 +161,18 @@ test("clears input and focuses on the search field when Enter key is pressed", a
   await waitFor(() => {
     expect(searchField).toHaveValue("");
   });
+});
+
+test("does not clear search input when Enter key is pressed when focused on the search element", () => {
+  render(<App />);
+
+  const searchField = screen.getByPlaceholderText(/search movies/i);
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  act(() => {
+    user.type(searchField, "int{enter}");
+  });
+
+  expect(searchField).toHaveFocus();
+  expect(searchField).toHaveValue("int");
 });
