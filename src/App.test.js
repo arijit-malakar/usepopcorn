@@ -22,11 +22,15 @@ afterAll(() => {
   server.close();
 });
 
-test("shows loading text and then hides it after successful fetching of movie", async () => {
+function renderAndSearch(query) {
   render(<App />);
 
   const searchInput = screen.getByPlaceholderText(/search movies/i);
-  fireEvent.change(searchInput, { target: { value: "int" } });
+  fireEvent.change(searchInput, { target: { value: query } });
+}
+
+test("shows loading text and then hides it after successful fetching of movie", async () => {
+  renderAndSearch("int");
 
   const loadingText = await screen.findByText("Loading...");
   expect(loadingText).toBeInTheDocument();
@@ -40,10 +44,7 @@ test("shows loading text and then hides it after successful fetching of movie", 
 });
 
 test("renders error text when searched for an invalid query", async () => {
-  render(<App />);
-
-  const searchInput = screen.getByPlaceholderText(/search movies/i);
-  fireEvent.change(searchInput, { target: { value: "invalidquery" } });
+  renderAndSearch("invalidquery");
 
   const errorMessage = await screen.findByText("Movie not found");
 
@@ -52,10 +53,7 @@ test("renders error text when searched for an invalid query", async () => {
 });
 
 test("renders movie details on clicking a movie from the search result and hides it on clicking again", async () => {
-  render(<App />);
-
-  const searchInput = screen.getByPlaceholderText(/search movies/i);
-  fireEvent.change(searchInput, { target: { value: "int" } });
+  renderAndSearch("int");
 
   const movieTitle = await screen.findByText("interstellar wars");
   fireEvent.click(movieTitle);
@@ -75,10 +73,7 @@ test("renders movie details on clicking a movie from the search result and hides
 });
 
 test("renders watched movie and updates watched summary on adding a movie from movie details", async () => {
-  render(<App />);
-
-  const searchInput = screen.getByPlaceholderText(/search movies/i);
-  fireEvent.change(searchInput, { target: { value: "int" } });
+  renderAndSearch("int");
 
   const movieTitle = await screen.findByText("interstellar");
   fireEvent.click(movieTitle);
