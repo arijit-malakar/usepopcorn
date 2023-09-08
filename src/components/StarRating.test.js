@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import user from "@testing-library/user-event";
 import StarRating from "./StarRating";
 
 test("renders 10 blank stars, having red outline color and size of 30px", () => {
