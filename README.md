@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# usePopcorn
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+`usePopcorn` is a React application that allows users to search for movies by fetching data from the OMDb API. The app displays a list of search results, and users can click on any movie to view its details, including the movie poster, name, cast, crew, IMDb rating, and a rating field to add the movie to their watchlist along with a user-provided rating. Users cannot add a rating to the same movie again.
 
-In the project directory, you can run:
+Once a movie is added to the watchlist, a summary of watched movies is displayed, showing the calculated average user ratings and average IMDb ratings of all the movies added to the watchlist by the user. The watchlist data is persisted to local storage, ensuring that the watchlist and summary of watched movies remain intact even after refreshing the app.
 
-### `npm start`
+## Using the OMDb API
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To use the OMDb API in this project, follow these steps:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Visit the [OMDb API website](https://www.omdbapi.com/apikey.aspx).
+2. Sign up for a FREE account.
+3. Provide your email to receive the API key.
+4. Add the received API key to a `.env` file in the project's root folder using the following format:
 
-### `npm test`
+   ```plaintext
+   REACT_APP_API_KEY=api-key-string
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Getting Started
 
-### `npm run build`
+To run this project on your local machine, follow these steps:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Clone the Repository
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Open a terminal or command prompt on your local machine.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Run the following command to clone the repository:
 
-### `npm run eject`
+   ```bash
+   git clone https://github.com/arijit-malakar/usepopcorn.git
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Install Dependencies
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Navigate to the project directory:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   cd usepopcorn
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Install the project dependencies using npm:
 
-## Learn More
+   ```bash
+   npm install
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Running the Project
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. After installing the dependencies, start the development server by running the following command:
 
-### Code Splitting
+   ```bash
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. Open a web browser and visit [http://localhost:3000](http://localhost:3000) to view the usePopcorn app.
 
-### Analyzing the Bundle Size
+Now you have the project running locally on your machine. Explore and enjoy the movie search and watchlist features! 🍿🎬
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Running Tests
 
-### Making a Progressive Web App
+The project includes test cases for all components using Jest and React Testing Library (RTL). To run the tests, use the following commands:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Run tests:
 
-### Advanced Configuration
+  ```bash
+  npm run test
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Generate a coverage report:
+  ```bash
+  npm run test:coverage
+  ```
